@@ -18,7 +18,6 @@ technical-tests/
 │   ├── web/              # Next.js 16 (TypeScript strict)
 │   └── api/              # FastAPI (Python 3.11+)
 ├── .clauderc             # Config Claude Code
-├── docker-compose.yml    # PostgreSQL local
 └── README.md
 ```
 
@@ -26,7 +25,7 @@ technical-tests/
 
 - **Frontend** : Next.js 16, TypeScript, shadcn/ui, Tailwind, Supabase Auth
 - **Backend** : FastAPI, SQLAlchemy 2.0, Alembic, Pydantic v2
-- **Database** : PostgreSQL (Docker local / Supabase prod)
+- **Database** : PostgreSQL (local / Supabase prod)
 - **Deploy** : Vercel (frontend) + Railway (backend)
 
 ## 🚀 Quick Start
@@ -35,7 +34,7 @@ technical-tests/
 
 - Node.js 18+
 - Python 3.11+
-- Docker & Docker Compose
+- PostgreSQL 15+
 - Compte Supabase (gratuit)
 
 ### 1. Clone & Install
@@ -59,12 +58,12 @@ pip install -r requirements.txt
 ### 2. Setup Database
 
 ```bash
-# Démarrer PostgreSQL (Docker)
-cd ../..  # Revenir à la racine
-docker-compose up -d
+# S'assurer que PostgreSQL tourne localement
+# macOS: brew services start postgresql@15
+# Linux: sudo systemctl start postgresql
 
-# Vérifier que Postgres tourne
-docker ps
+# Créer la base de données
+psql -c "CREATE DATABASE technical_tests;"
 ```
 
 ### 3. Configuration
@@ -282,12 +281,7 @@ alembic downgrade base  # Rollback tout
 ### Accéder à PostgreSQL
 
 ```bash
-# Via Docker
-docker exec -it technical-tests-postgres-1 psql -U techtest -d technical_tests
-
-# Via psql local
-psql -h localhost -U techtest -d technical_tests
-# Password: techtest
+psql -h localhost -U <user> -d technical_tests
 ```
 
 ## 🚢 Deployment
@@ -372,14 +366,14 @@ lsof -ti:8000 | xargs kill -9
 ### PostgreSQL connection refused
 
 ```bash
-# Vérifier que Docker tourne
-docker ps
+# Vérifier que PostgreSQL tourne
+# macOS:
+brew services list | grep postgresql
+brew services restart postgresql@15
 
-# Restart container
-docker-compose restart postgres
-
-# Check logs
-docker-compose logs postgres
+# Linux:
+sudo systemctl status postgresql
+sudo systemctl restart postgresql
 ```
 
 ### JWT Invalid

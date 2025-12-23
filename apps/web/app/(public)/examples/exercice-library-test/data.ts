@@ -1,0 +1,88 @@
+import { Exercise } from "./page";
+
+export const MOCK_EXERCISES: Exercise[] = [
+  {
+    id: "1",
+    name: "Bench Press",
+    muscleGroup: "chest",
+    difficulty: 3,
+    hasEquipment: true,
+  },
+  {
+    id: "2",
+    name: "Push-ups",
+    muscleGroup: "chest",
+    difficulty: 2,
+    hasEquipment: false,
+  },
+  {
+    id: "3",
+    name: "Squats",
+    muscleGroup: "legs",
+    difficulty: 3,
+    hasEquipment: false,
+  },
+  {
+    id: "4",
+    name: "Leg Press",
+    muscleGroup: "legs",
+    difficulty: 2,
+    hasEquipment: true,
+  },
+  {
+    id: "5",
+    name: "Pull-ups",
+    muscleGroup: "back",
+    difficulty: 4,
+    hasEquipment: true,
+  },
+  {
+    id: "6",
+    name: "Deadlift",
+    muscleGroup: "back",
+    difficulty: 5,
+    hasEquipment: true,
+  },
+  {
+    id: "7",
+    name: "Shoulder Press",
+    muscleGroup: "shoulders",
+    difficulty: 3,
+    hasEquipment: true,
+  },
+  {
+    id: "8",
+    name: "Lateral Raises",
+    muscleGroup: "shoulders",
+    difficulty: 2,
+    hasEquipment: true,
+  },
+  {
+    id: "9",
+    name: "Bicep Curls",
+    muscleGroup: "arms",
+    difficulty: 1,
+    hasEquipment: true,
+  },
+  {
+    id: "10",
+    name: "Tricep Dips",
+    muscleGroup: "arms",
+    difficulty: 3,
+    hasEquipment: false,
+  },
+  {
+    id: "11",
+    name: "Plank",
+    muscleGroup: "core",
+    difficulty: 2,
+    hasEquipment: false,
+  },
+  {
+    id: "12",
+    name: "Russian Twists",
+    muscleGroup: "core",
+    difficulty: 3,
+    hasEquipment: false,
+  },
+];

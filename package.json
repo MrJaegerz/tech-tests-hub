@@ -1,0 +1,19 @@
+{
+  "name": "technical-tests",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/web",
+    "apps/api"
+  ],
+  "scripts": {
+    "dev": "concurrently \"pnpm run dev:web\" \"pnpm run dev:api\"",
+    "dev:web": "cd apps/web && pnpm run dev",
+    "dev:api": "cd apps/api && source venv/bin/activate && uvicorn app.main:app --reload",
+    "build": "cd apps/web && pnpm run build",
+    "lint": "cd apps/web && pnpm run lint"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
