@@ -1,5 +1,5 @@
 packages:
-  - .
+  - "apps/*" # Tous les dossiers dans apps/
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
