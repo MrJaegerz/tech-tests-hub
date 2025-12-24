@@ -1,6 +1,6 @@
 # Exercice Live Coding - Mission Dashboard
 
-> Inspiré Brigad | Durée estimée : 45-60min
+> Durée estimée : 45-60min
 
 ## Contexte
 
@@ -9,8 +9,8 @@ Tu travailles sur une plateforme de staffing pour l'hôtellerie-restauration. Le
 ## Setup initial
 
 ```bash
-npx create-react-app brigad-interview --template typescript
-cd brigad-interview
+npx create-react-app mission-dashboard --template typescript
+cd mission-dashboard
 npm start
 ```
 

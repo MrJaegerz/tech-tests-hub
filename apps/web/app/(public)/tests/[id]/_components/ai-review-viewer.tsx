@@ -93,7 +93,7 @@ export function AIReviewViewer({ content }: AIReviewViewerProps) {
               </div>
               <div className="flex-1">
                 <CardTitle className="text-xl text-blue-900 dark:text-blue-100">
-                  Code Review par Claude IA
+                  Code Review par Claude (Anthropic)
                 </CardTitle>
                 <CardDescription className="text-blue-700 dark:text-blue-300 mt-1">
                   Analyse approfondie avec recommandations d'amélioration
