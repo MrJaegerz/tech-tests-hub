@@ -11,7 +11,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 # 2. Push la DB (équivalent de "prisma db push")
-python db_push.py
+python scripts/db_push.py
 
 # 3. Démarrer le serveur (équivalent de "npm run dev")
 uvicorn app.main:app --reload
@@ -19,17 +19,18 @@ uvicorn app.main:app --reload
 
 ## 📦 Scripts disponibles
 
-| Commande | Équivalent npm/prisma | Description |
-|----------|----------------------|-------------|
-| `python db_push.py` | `prisma db push` | Créer/sync les tables |
-| `uvicorn app.main:app --reload` | `npm run dev` | Démarrer en mode dev |
-| `python test_api.py` | `npm test` | Tester la connexion |
-| `alembic revision --autogenerate -m "msg"` | `prisma migrate dev` | Créer une migration |
-| `alembic upgrade head` | `prisma migrate deploy` | Appliquer les migrations |
+| Commande                                   | Équivalent npm/prisma   | Description              |
+| ------------------------------------------ | ----------------------- | ------------------------ |
+| `python scripts/db_push.py`                | `prisma db push`        | Créer/sync les tables    |
+| `uvicorn app.main:app --reload`            | `npm run dev`           | Démarrer en mode dev     |
+| `pytest`                                   | `npm test`              | Lancer les tests         |
+| `alembic revision --autogenerate -m "msg"` | `prisma migrate dev`    | Créer une migration      |
+| `alembic upgrade head`                     | `prisma migrate deploy` | Appliquer les migrations |
 
 ## 🗄️ Base de données
 
 ### Configuration actuelle
+
 - **PostgreSQL 15** (local via Homebrew)
 - **Database**: `technical_tests`
 - **User**: `moi` (votre user macOS)
@@ -52,16 +53,16 @@ brew services restart postgresql@15
 
 L'API tourne sur **http://localhost:8000**
 
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| GET | `/` | API info | ❌ |
-| GET | `/health` | Health check | ❌ |
-| GET | `/docs` | Swagger UI | ❌ |
-| GET | `/api/v1/tests` | Liste des tests | ❌ Public |
-| GET | `/api/v1/tests/{id}` | Détail test | ❌ Public |
-| POST | `/api/v1/tests` | Créer test | ✅ API Key |
-| PUT | `/api/v1/tests/{id}` | Modifier test | ✅ API Key |
-| DELETE | `/api/v1/tests/{id}` | Supprimer test | ✅ API Key |
+| Method | Endpoint             | Description     | Auth       |
+| ------ | -------------------- | --------------- | ---------- |
+| GET    | `/`                  | API info        | ❌         |
+| GET    | `/health`            | Health check    | ❌         |
+| GET    | `/docs`              | Swagger UI      | ❌         |
+| GET    | `/api/v1/tests`      | Liste des tests | ❌ Public  |
+| GET    | `/api/v1/tests/{id}` | Détail test     | ❌ Public  |
+| POST   | `/api/v1/tests`      | Créer test      | ✅ API Key |
+| PUT    | `/api/v1/tests/{id}` | Modifier test   | ✅ API Key |
+| DELETE | `/api/v1/tests/{id}` | Supprimer test  | ✅ API Key |
 
 ### 🔐 Authentification
 
@@ -69,6 +70,7 @@ L'API tourne sur **http://localhost:8000**
 **Écriture (POST/PUT/DELETE)** : Nécessite un header `X-API-Key`
 
 Exemples :
+
 ```bash
 # Lecture publique - accessible à tous
 curl http://localhost:8000/api/v1/tests
@@ -83,14 +85,15 @@ curl -X POST http://localhost:8000/api/v1/tests \
 ## 📖 Documentation interactive
 
 Une fois l'API démarrée:
+
 - **Swagger UI**: http://localhost:8000/docs
 - **ReDoc**: http://localhost:8000/redoc
 
 ## 🧪 Tests
 
 ```bash
-# Tester la connexion DB et les routes
-python test_api.py
+# Lancer les tests
+pytest
 
 # Test endpoints avec curl
 curl http://localhost:8000/health
@@ -106,19 +109,17 @@ apps/api/
 │   ├── config.py            # Config (Pydantic Settings)
 │   ├── database.py          # SQLAlchemy setup
 │   ├── dependencies.py      # API Key verification
-│   ├── models/
-│   │   └── test.py          # Modèle SQLAlchemy
-│   ├── schemas/
-│   │   └── test.py          # Schémas Pydantic
-│   ├── routers/
-│   │   ├── health.py        # Health check
-│   │   └── tests.py         # CRUD endpoints
-│   └── auth/
-│       └── jwt.py           # JWT verification
-├── alembic/                 # Migrations (comme Prisma)
-├── db_push.py              # Push DB (comme prisma db push)
-├── test_api.py             # Tests
-└── requirements.txt        # Dépendances
+│   ├── models/              # Modèles SQLAlchemy
+│   ├── schemas/             # Schémas Pydantic
+│   ├── routers/             # Endpoints API
+│   └── auth/                # Authentification JWT
+├── alembic/                 # Migrations DB
+├── scripts/                 # Scripts utilitaires
+│   ├── db_push.py           # Push DB
+│   ├── init_db.py           # Init DB
+│   └── populate_example_test.py
+├── tests/                   # Tests pytest
+└── requirements.txt         # Dépendances
 ```
 
 ## 🔐 Modèle de données
@@ -126,14 +127,20 @@ apps/api/
 ```python
 # app/models/test.py
 class TechnicalTest:
-    id: str              # Primary key
-    title: str           # Titre du test
-    description: str     # Description (nullable)
-    github_url: str      # Lien GitHub
-    result: str          # SUCCESS | PARTIAL | FAIL
-    created_at: datetime # Auto
-    updated_at: datetime # Auto
-    user_id: str         # User Supabase
+    id: str                    # Primary key
+    title: str                 # Titre du test
+    description: str           # Description (nullable)
+    github_url: str            # Lien GitHub
+    result: str                # SUCCESS | PARTIAL | FAIL
+    test_type: str             # UI | API | BACKEND | ALGORITHM | FULLSTACK
+    requirements_markdown: str # Instructions du test (Markdown)
+    solution_files: JSON       # [{path, content, language}]
+    demo_url: str              # URL démo live (optionnel)
+    review_ia: str             # Review IA (Markdown)
+    example_path: str          # Chemin vers /examples
+    created_at: datetime       # Auto
+    updated_at: datetime       # Auto
+    user_id: str               # User ID
 ```
 
 ## 🔑 Variables d'environnement
@@ -151,9 +158,9 @@ CORS_ORIGINS=["http://localhost:3000"]
 ## 📝 Workflow de dev
 
 1. **Modifier le modèle** dans `app/models/test.py`
-2. **Push la DB** avec `python db_push.py` (dev rapide)
+2. **Push la DB** avec `python scripts/db_push.py` (dev rapide)
    - OU créer une migration: `alembic revision --autogenerate -m "msg"`
-3. **Tester** avec `python test_api.py`
+3. **Tester** avec `pytest`
 4. **Démarrer l'API** avec `uvicorn app.main:app --reload`
 
 ## ✅ Status

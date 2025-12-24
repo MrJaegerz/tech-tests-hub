@@ -17,7 +17,7 @@ technical-tests/
 ├── apps/
 │   ├── web/              # Next.js 16 (TypeScript strict)
 │   └── api/              # FastAPI (Python 3.11+)
-├── .clauderc             # Config Claude Code
+├── pnpm-workspace.yaml   # Config monorepo pnpm
 └── README.md
 ```
 
@@ -219,7 +219,13 @@ CREATE TABLE technical_tests (
     title VARCHAR(255) NOT NULL,
     description TEXT,
     github_url VARCHAR(500) NOT NULL,
-    result VARCHAR(20) NOT NULL, -- SUCCESS, PARTIAL, FAIL
+    result VARCHAR(20) NOT NULL,           -- SUCCESS, PARTIAL, FAIL
+    test_type VARCHAR(50),                 -- UI, API, BACKEND, ALGORITHM, FULLSTACK
+    requirements_markdown TEXT,            -- Instructions du test (Markdown)
+    solution_files JSON,                   -- [{path, content, language}]
+    demo_url VARCHAR(500),                 -- URL démo live
+    review_ia TEXT,                        -- Review IA (Markdown)
+    example_path VARCHAR(500),             -- Chemin vers /examples
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW(),
     user_id VARCHAR NOT NULL
@@ -399,27 +405,28 @@ sudo systemctl restart postgresql
 
 ## 🗺️ Roadmap
 
-**Phase 1 (MVP) :**
+**Phase 1 (MVP) :** ✅
 
-- [ ] Setup monorepo
-- [ ] Auth Supabase
-- [ ] CRUD tests techniques
-- [ ] Landing page publique
-- [ ] Dashboard basique
+- [x] Setup monorepo (pnpm workspace)
+- [x] API FastAPI avec CRUD tests
+- [x] Landing page publique
+- [x] Liste et détail des tests
+- [x] Affichage review IA
+- [x] Exemples interactifs
 
 **Phase 2 :**
 
-- [ ] Tags/catégories sur tests
+- [ ] Auth Supabase
+- [ ] Dashboard admin
 - [ ] Filtres + search
 - [ ] Pagination
-- [ ] Export PDF
 
 **Phase 3 :**
 
-- [ ] Système de notation (1-5 étoiles)
-- [ ] Partage public via lien
+- [ ] Tags/catégories sur tests
+- [ ] Système de notation
 - [ ] Statistiques (graphiques)
-- [ ] Dark mode
+- [ ] Export PDF
 
 ## 📄 License
 
@@ -427,10 +434,11 @@ MIT
 
 ## 👤 Author
 
-Développeur full-stack | Epitech 2022
+Aimé Koutsimouka
 
-- Stack : React/Next.js, Ruby on Rails, Python/FastAPI
-- 4 ans en entreprise + 1 an side projects
+Full-Stack Developer | React · TypeScript | Applications métiers & plateformes web 💼⚙️
+
+- Stack : Next.js, FastAPI, Python
 
 ---
 
