@@ -11,6 +11,7 @@ class TechnicalTest(Base):
     github_url = Column(String(500), nullable=False)
     result = Column(String(20), nullable=False)  # SUCCESS, PARTIAL, FAIL
     test_type = Column(String(50))  # UI, API, BACKEND, ALGORITHM, FULLSTACK
+    duration_minutes = Column(Integer)  # Estimated duration in minutes
     requirements_markdown = Column(Text)  # Test requirements/instructions
     solution_files = Column(JSON)  # Array of {path: string, content: string, language: string}
     demo_url = Column(String(500))  # Optional live demo URL

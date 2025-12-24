@@ -103,3 +103,6 @@ dmypy.json
 # Logs
 *.log
 logs/
+
+# Scripts de population (données locales)
+apps/api/populate/

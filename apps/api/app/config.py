@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         case_sensitive = True
+        extra = "ignore"  # Ignorer les variables non déclarées dans .env
 
     @property
     def cors_origins_list(self) -> List[str]:

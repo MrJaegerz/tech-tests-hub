@@ -15,6 +15,7 @@ class TestBase(BaseModel):
     github_url: HttpUrl
     result: Literal["SUCCESS", "PARTIAL", "FAIL"]
     test_type: Optional[Literal["UI", "API", "BACKEND", "ALGORITHM", "FULLSTACK"]] = None
+    duration_minutes: Optional[int] = Field(None, ge=1, le=600)  # 1 min to 10 hours max
     requirements_markdown: Optional[str] = None
     solution_files: Optional[list[SolutionFile]] = None
     demo_url: Optional[HttpUrl] = None
